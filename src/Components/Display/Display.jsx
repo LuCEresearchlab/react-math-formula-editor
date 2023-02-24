@@ -1,5 +1,6 @@
 import { Paper, styled, Grid } from "@mui/material";
 import Tex2SVG from "react-hook-mathjax";
+import PropTypes from "prop-types";
 
 const DisplayComponent = styled(Paper)(({ theme }) => ({
   borderRadius: 5,
@@ -19,5 +20,16 @@ function Display({ currentLatex }) {
     </Grid>
   );
 }
+
+Display.propTypes = {
+  /**
+   * Latex expression to be displayed
+   */
+  currentLatex: PropTypes.string.isRequired,
+};
+
+Display.defaultProps = {
+  currentLatex: "\\text{Press a button}",
+};
 
 export default Display;
