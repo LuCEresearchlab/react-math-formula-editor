@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import InputComponent from "./Components/InputComponent";
+import InputComponent from "./Components/InputComponent/InputComponent";
 import theme from "./theme";
 import { ThemeProvider, CssBaseline } from "@mui/material";
 
