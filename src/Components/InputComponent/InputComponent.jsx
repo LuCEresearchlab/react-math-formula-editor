@@ -1,59 +1,95 @@
-import { Container, Grid, styled, Paper } from "@mui/material";
-import Display from "../Display/Display";
+import { Container, Grid, Paper, AppBar, Tabs, Tab } from "@material-ui/core";
 import { useState } from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import Display from "../Display/Display";
 import InputButton from "../InputButton/InputButton";
+import React from "react";
 
-const buttons = [
-  { latex: "\\frac{{\\square}}{\\square}", operator: "—" },
-  { latex: "{\\square}^{\\square}", operator: "^" },
-  { latex: "\\sqrt[\\square]{\\square}", operator: "√" },
-  { latex: "\\int_{\\square}^{\\square}{\\square}", operator: "∫" },
-  { latex: "\\sum_{\\square}^{\\square}{\\square}", operator: "Σ" },
-  { latex: "\\prod_{\\square}^{\\square}{\\square}", operator: "∏" },
-  { latex: "\\lim_{\\square}{\\square}", operator: "lim" },
-  { latex: "\\infty", operator: "∞" },
-  { latex: "\\alpha", operator: "α" },
-  { latex: "\\pi", operator: "π" },
-  { latex: "\\sin{\\square}", operator: "sin" },
-  { latex: "\\cos{\\square}", operator: "cos" },
-  { latex: "{\\square}+{\\square}", operator: "+" },
-  { latex: "{\\square}-{\\square}", operator: "-" },
-  { latex: "{\\square}\\times{\\square}", operator: "×" },
-  { latex: "{\\square}\\div{\\square}", operator: "÷" },
-  { latex: "{\\square}\\in{\\square}", operator: "∈" },
-  { latex: "{\\square}\\notin{\\square}", operator: "∉" },
-  { latex: "{\\square}\\subset{\\square}", operator: "⊂" },
-  { latex: "{\\square}\\supset{\\square}", operator: "⊃" },
-  { latex: "{\\square}>{\\square}", operator: ">" },
-  { latex: "{\\square}<{\\square}", operator: "<" },
-  { latex: "{\\square}\\leq{\\square}", operator: "≤" },
-  { latex: "{\\square}\\geq{\\square}", operator: "≥" },
-  { latex: "\\exists{\\square}", operator: "∃" },
-  { latex: "\\forall{\\square}", operator: "∀" },
-  { latex: "{\\square}={\\square}", operator: "=" },
-  { latex: "{\\square}\\approx{\\square}", operator: "≈" },
-  { latex: "{\\square}\\neq{\\square}", operator: "≠" },
-  { latex: "\\pm{\\square}", operator: "±" },
+const content = [
+  {
+    name: "unary",
+    buttons: [
+      { latex: "-{\\square}", operator: "-" },
+      { latex: "\\pm{\\square}", operator: "±" },
+      { latex: "\\sin{\\square}", operator: "sin" },
+      { latex: "\\cos{\\square}", operator: "cos" },
+      { latex: "\\tan{\\square}", operator: "tan" },
+      { latex: "\\exists{\\square}", operator: "∃" },
+      { latex: "\\forall{\\square}", operator: "∀" },
+    ],
+  },
+  {
+    name: "binary",
+    buttons: [
+      { latex: "{\\square}+{\\square}", operator: "+" },
+      { latex: "{\\square}-{\\square}", operator: "-" },
+      { latex: "{\\square}\\times{\\square}", operator: "×" },
+      { latex: "{\\square}\\div{\\square}", operator: "÷" },
+      { latex: "{\\square}={\\square}", operator: "=" },
+      { latex: "{\\square}\\approx{\\square}", operator: "≈" },
+      { latex: "{\\square}\\neq{\\square}", operator: "≠" },
+      { latex: "{\\square}>{\\square}", operator: ">" },
+      { latex: "{\\square}<{\\square}", operator: "<" },
+      { latex: "{\\square}\\leq{\\square}", operator: "≤" },
+      { latex: "{\\square}\\geq{\\square}", operator: "≥" },
+      { latex: "{\\square}\\in{\\square}", operator: "∈" },
+      { latex: "{\\square}\\notin{\\square}", operator: "∉" },
+      { latex: "{\\square}\\subset{\\square}", operator: "⊂" },
+      { latex: "{\\square}\\supset{\\square}", operator: "⊃" },
+    ],
+  },
+  {
+    name: "special",
+    buttons: [
+      { latex: "\\frac{{\\square}}{\\square}", operator: "—" },
+      { latex: "{\\square}^{\\square}", operator: "^" },
+      { latex: "\\sqrt[\\square]{\\square}", operator: "√" },
+      { latex: "\\int_{\\square}^{\\square}{\\square}", operator: "∫" },
+      { latex: "\\sum_{\\square}^{\\square}{\\square}", operator: "Σ" },
+      { latex: "\\prod_{\\square}^{\\square}{\\square}", operator: "∏" },
+      { latex: "\\lim_{\\square}{\\square}", operator: "lim" },
+      { latex: "\\log_{\\square}{\\square}", operator: "log" },
+    ],
+  },
+  {
+    name: "operands",
+    buttons: [
+      { latex: "\\infty", operator: "∞" },
+      { latex: "\\alpha", operator: "α" },
+      { latex: "\\pi", operator: "π" },
+    ],
+  },
 ];
 
-const InputBase = styled(Paper)(({ theme }) => ({
-  padding: theme.spacing(2),
-  marginTop: theme.spacing(3),
-  borderRadius: 5,
+const useStyles = makeStyles(theme => ({
+  root: {
+    padding: theme.spacing(2),
+    borderRadius: 5,
+  },
 }));
 
 function InputComponent() {
+  const [currentTab, setCurrentTab] = useState(0);
   const [currentLatex, setCurrentLatex] = useState("\\text{Press a button}");
   const [currentOperator, setCurrentOperator] = useState("");
-
+  const classes = useStyles();
   return (
     <Container maxWidth="md">
-      <InputBase elevation={3}>
+      <Paper elevation={3} className={classes.root}>
         <Grid container spacing={1}>
           <Display currentLatex={currentLatex} />
-          {buttons.map(button => (
+          <AppBar position="static">
+            <Tabs
+              value={currentTab}
+              onChange={(e, newValue) => setCurrentTab(newValue)}
+            >
+              {content.map((tab, index) => (
+                <Tab label={tab.name} id={`tab-${index}`} key={index} />
+              ))}
+            </Tabs>
+          </AppBar>
+          {content[currentTab].buttons.map(button => (
             <InputButton
-              key={button.latex}
               buttonLatex={button.latex}
               setCurrentLatex={setCurrentLatex}
               buttonOperator={button.operator}
@@ -62,7 +98,7 @@ function InputComponent() {
             ></InputButton>
           ))}
         </Grid>
-      </InputBase>
+      </Paper>
     </Container>
   );
 }

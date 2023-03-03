@@ -1,30 +1,40 @@
-import { Button, Grid, styled } from "@mui/material";
+import { Button, Grid } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 import Tex2SVG from "react-hook-mathjax";
 import PropTypes from "prop-types";
+import React from "react";
 
-const StyledButton = styled(Button)(props => ({
-  borderColor: props.selected ? "green" : "blue",
-  fontSize: "1em",
-  "& > *:first-of-type": {
-    margin: 0,
+const useStyles = makeStyles(theme => ({
+  root: {
+    fontSize: "1.1em",
+  },
+  unselected: {
+    borderColor: "green",
+  },
+  selected: {
+    borderColor: "red",
   },
 }));
 
 function InputButton({
-  key,
   buttonLatex,
   setCurrentLatex,
   buttonOperator,
   setCurrentOperator,
   selected,
 }) {
+  const classes = useStyles();
+
   return (
     <Grid item xs={2}>
-      <StyledButton
+      <Button
+        className={`
+          ${classes.root} 
+          ${selected ? classes.selected : classes.unselected}
+        `}
         value={buttonLatex}
-        key={key}
+        key={buttonLatex}
         variant="outlined"
-        color="primary"
         onClick={() => {
           setCurrentLatex(buttonLatex);
           setCurrentOperator(buttonOperator);
@@ -32,16 +42,12 @@ function InputButton({
         }}
         selected={selected}
         startIcon={<Tex2SVG latex={buttonLatex} />}
-      ></StyledButton>
+      ></Button>
     </Grid>
   );
 }
 
 InputButton.propTypes = {
-  /**
-   * Unique key for the button element in the buttons list
-   */
-  key: PropTypes.string.isRequired,
   /**
    * Latex expression of the button
    */

@@ -1,8 +1,10 @@
-const webpack = require("webpack");
+const path = require("path");
 const pkg = require("./package.json");
+const webpackConfig = require("./styleguide.webpack.config.js");
 
 module.exports = {
   title: `${pkg.name} v${pkg.version}`,
+  components: "src/components/**/*.jsx",
   showSidebar: true,
   usageMode: "expand",
   skipComponentsWithoutExample: true,
@@ -31,24 +33,15 @@ module.exports = {
       },
     },
   },
-  dangerouslyUpdateWebpackConfig(config) {
-    config.cache = false;
-    config.module.rules.push({
-      test: /.\.md$/,
-      type: "javascript/auto",
-    });
-    config.plugins.push(
-      new webpack.NormalModuleReplacementPlugin(
-        /react-styleguidist\/lib\/loaders\/utils\/client\/requireInRuntime$/,
-        "react-styleguidist/lib/loaders/utils/client/requireInRuntime"
-      )
-    );
-    config.plugins.push(
-      new webpack.NormalModuleReplacementPlugin(
-        /react-styleguidist\/lib\/loaders\/utils\/client\/evalInContext$/,
-        "react-styleguidist/lib/loaders/utils/client/evalInContext"
-      )
-    );
-    return config;
+  webpackConfig,
+  template: {
+    head: {
+      links: [
+        {
+          rel: "stylesheet",
+          href: "https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css",
+        },
+      ],
+    },
   },
 };
