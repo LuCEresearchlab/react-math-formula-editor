@@ -1,4 +1,12 @@
-import { Container, Grid, Paper, AppBar, Tabs, Tab } from "@material-ui/core";
+import {
+  Container,
+  Grid,
+  Paper,
+  AppBar,
+  Tabs,
+  Tab,
+  Box,
+} from "@material-ui/core";
 import { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Display from "../Display/Display";
@@ -66,6 +74,9 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(2),
     borderRadius: 5,
   },
+  appBar: {
+    marginBottom: theme.spacing(2),
+  },
 }));
 
 function InputComponent() {
@@ -78,15 +89,21 @@ function InputComponent() {
       <Paper elevation={3} className={classes.root}>
         <Grid container spacing={1}>
           <Display currentLatex={currentLatex} />
-          <AppBar position="static">
-            <Tabs
-              value={currentTab}
-              onChange={(e, newValue) => setCurrentTab(newValue)}
-            >
-              {content.map((tab, index) => (
-                <Tab label={tab.name} id={`tab-${index}`} key={index} />
-              ))}
-            </Tabs>
+          <AppBar position="static" className={classes.appBar}>
+            <Box display="flex" justifyContent="center" width="100%">
+              <Tabs
+                value={currentTab}
+                onChange={(e, newValue) => setCurrentTab(newValue)}
+                centered
+                variant="scrollable"
+                scrollButtons="auto"
+                selectionFollowsFocus
+              >
+                {content.map((tab, index) => (
+                  <Tab label={tab.name} id={`tab-${index}`} key={index} />
+                ))}
+              </Tabs>
+            </Box>
           </AppBar>
           {content[currentTab].buttons.map(button => (
             <InputButton

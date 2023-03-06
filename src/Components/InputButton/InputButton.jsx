@@ -9,10 +9,10 @@ const useStyles = makeStyles(theme => ({
     fontSize: "1.1em",
   },
   unselected: {
-    borderColor: "green",
+    borderColor: "#3f51b5",
   },
   selected: {
-    borderColor: "red",
+    borderColor: "#f40454",
   },
 }));
 
@@ -26,7 +26,7 @@ function InputButton({
   const classes = useStyles();
 
   return (
-    <Grid item xs={2}>
+    <Grid item>
       <Button
         className={`
           ${classes.root} 
