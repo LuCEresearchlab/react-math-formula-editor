@@ -1,18 +1,18 @@
-import { Button, Grid } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import Tex2SVG from "react-hook-mathjax";
-import PropTypes from "prop-types";
-import React from "react";
+import { Button, Grid } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import Tex2SVG from 'react-hook-mathjax';
+import PropTypes from 'prop-types';
+import React from 'react';
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    fontSize: "1.1em",
+const useStyles = makeStyles((theme) => ({
+  inputButton: {
+    fontSize: '0.8em',
   },
-  unselected: {
-    borderColor: "#3f51b5",
+  unselectedButton: {
+    borderColor: '#3f51b5',
   },
-  selected: {
-    borderColor: "#f40454",
+  selectedButton: {
+    borderColor: '#f40454',
   },
 }));
 
@@ -26,24 +26,22 @@ function InputButton({
   const classes = useStyles();
 
   return (
-    <Grid item>
-      <Button
-        className={`
-          ${classes.root} 
-          ${selected ? classes.selected : classes.unselected}
+    <Button
+      className={`
+          ${classes.inputButton} 
+          ${selected ? classes.selectedButton : classes.unselectedButton}
         `}
-        value={buttonLatex}
-        key={buttonLatex}
-        variant="outlined"
-        onClick={() => {
-          setCurrentLatex(buttonLatex);
-          setCurrentOperator(buttonOperator);
-          console.log(buttonLatex, buttonOperator);
-        }}
-        selected={selected}
-        startIcon={<Tex2SVG latex={buttonLatex} />}
-      ></Button>
-    </Grid>
+      value={buttonLatex}
+      key={buttonLatex}
+      variant="outlined"
+      onClick={() => {
+        setCurrentLatex(buttonLatex);
+        setCurrentOperator(buttonOperator);
+      }}
+      selected={selected}
+    >
+      <Tex2SVG latex={buttonLatex} />
+    </Button>
   );
 }
 
@@ -71,10 +69,10 @@ InputButton.propTypes = {
 };
 
 InputButton.defaultProps = {
-  key: "",
-  buttonLatex: "\\text{Press a button}",
+  key: '',
+  buttonLatex: '\\text{Press a button}',
   setCurrentLatex: () => {},
-  buttonOperator: "",
+  buttonOperator: '',
   setCurrentOperator: () => {},
   selected: false,
 };
