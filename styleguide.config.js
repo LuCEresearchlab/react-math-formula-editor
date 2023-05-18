@@ -41,6 +41,10 @@ module.exports = {
           rel: "stylesheet",
           href: "https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css",
         },
+        {
+          rel: "stylesheet",
+          href: "https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/katex.min.css",
+        },
       ],
     },
   },
