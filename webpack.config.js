@@ -63,7 +63,18 @@ module.exports = {
       },
       {
         test: /\.css$/i,
-        use: [MiniCssExtractPlugin.loader, "css-loader"],
+        use: [
+          {
+            loader: "style-loader",
+            options: {
+              injectType: "styleTag",
+              attributes: {
+                class: "test-style",
+              },
+            },
+          },
+          "css-loader",
+        ],
       },
       {
         test: /\.(woff|woff2|eot|ttf|otf)$/,
@@ -124,5 +135,5 @@ module.exports = {
       minSize: 30000,
       name: false,
     },
-  }
+  },
 };

@@ -1,66 +1,16 @@
-import { Grid, Paper, AppBar, Tabs, Tab, Box } from '@material-ui/core';
-import { useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Display from '../Display/Display';
-import InputButton from '../InputButton/InputButton';
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { useCallback, useReducer, useEffect, useMemo } from "react";
+import PropTypes from "prop-types";
 
-const content = [
-  {
-    name: 'unary',
-    buttons: [
-      { latex: '-{\\square}', operator: '-' },
-      { latex: '\\pm{\\square}', operator: '±' },
-      { latex: '\\sin{\\square}', operator: 'sin' },
-      { latex: '\\cos{\\square}', operator: 'cos' },
-      { latex: '\\tan{\\square}', operator: 'tan' },
-      { latex: '\\exists{\\square}', operator: '∃' },
-      { latex: '\\forall{\\square}', operator: '∀' },
-    ],
-  },
-  {
-    name: 'binary',
-    buttons: [
-      { latex: '{\\square}+{\\square}', operator: '+' },
-      { latex: '{\\square}-{\\square}', operator: '-' },
-      { latex: '{\\square}\\times{\\square}', operator: '×' },
-      { latex: '{\\square}\\div{\\square}', operator: '÷' },
-      { latex: '{\\square}={\\square}', operator: '=' },
-      { latex: '{\\square}\\approx{\\square}', operator: '≈' },
-      { latex: '{\\square}\\neq{\\square}', operator: '≠' },
-      { latex: '{\\square}>{\\square}', operator: '>' },
-      { latex: '{\\square}<{\\square}', operator: '<' },
-      { latex: '{\\square}\\leq{\\square}', operator: '≤' },
-      { latex: '{\\square}\\geq{\\square}', operator: '≥' },
-      { latex: '{\\square}\\in{\\square}', operator: '∈' },
-      { latex: '{\\square}\\notin{\\square}', operator: '∉' },
-      { latex: '{\\square}\\subset{\\square}', operator: '⊂' },
-      { latex: '{\\square}\\supset{\\square}', operator: '⊃' },
-    ],
-  },
-  {
-    name: 'special',
-    buttons: [
-      { latex: '\\frac{{\\square}}{\\square}', operator: '—' },
-      { latex: '{\\square}^{\\square}', operator: '^' },
-      { latex: '\\sqrt[\\square]{\\square}', operator: '√' },
-      { latex: '\\int_{\\square}^{\\square}{\\square}', operator: '∫' },
-      { latex: '\\sum_{\\square}^{\\square}{\\square}', operator: 'Σ' },
-      { latex: '\\prod_{\\square}^{\\square}{\\square}', operator: '∏' },
-      { latex: '\\lim_{\\square}{\\square}', operator: 'lim' },
-      { latex: '\\log_{\\square}{\\square}', operator: 'log' },
-    ],
-  },
-  {
-    name: 'operands',
-    buttons: [
-      { latex: '\\infty', operator: '∞' },
-      { latex: '\\alpha', operator: 'α' },
-      { latex: '\\pi', operator: 'π' },
-    ],
-  },
-];
+import { Grid, Paper, AppBar, Tabs, Tab, Box } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+
+import { tabsContent } from "../../initialState";
+import { mathInputReducer } from "../../store/reducer";
+import { initialInputState } from "../../store/initialState";
+
+import InputAccordion from "../InputAccordion/InputAccordion";
+
+import "../../../node_modules/katex/dist/katex.min.css";
 
 const useStyles = makeStyles((theme) => ({
   inputComponent: {
@@ -68,65 +18,117 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
     borderRadius: 5,
   },
-  tabsBar: {
-    marginBottom: theme.spacing(2),
-  },
-  inputContainer: {
-    display: 'grid',
-    rowGap: theme.spacing(2),
-    columnGap: theme.spacing(1),
-    gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))',
-    width: '100%',
-  },
 }));
 
 function InputComponent({
-  currentLatex,
-  setCurrentLatex,
-  currentOperator,
-  setCurrentOperator,
-  toggleIsCreatingNode,
-  isCreatingNode,
+  setCurrentMathSelection,
+  setIsCreatingMathNode,
+  isCreatingMathNode,
 }) {
-  const [currentTab, setCurrentTab] = useState(0);
+  const [
+    { currentTab, numberData, variableData, mathButtonData, currentAddingType },
+    dispatch,
+  ] = useReducer(mathInputReducer, initialInputState);
+
+  useEffect(() => {
+    if (currentAddingType !== "mathButton") {
+      const pieces = [
+        {
+          type: "text",
+          x: 12,
+          y: 12,
+          fontSize:
+            currentAddingType === "Number"
+              ? numberData.fontSize
+              : variableData.fontSize,
+          value:
+            currentAddingType === "Number"
+              ? (numberData.value.startsWith(".") ? "0" : "") +
+                numberData.value +
+                (numberData.isInfiniteNumber ? "…" : "")
+              : variableData.value,
+          periodicIndex:
+            currentAddingType === "Number" && Number(numberData.periodicIndex),
+          subscript:
+            currentAddingType === "Variable" && variableData.subscriptIndex,
+        },
+      ];
+      setCurrentMathSelection(pieces);
+    } else {
+      setCurrentMathSelection(mathButtonData.pieces);
+    }
+    setIsCreatingMathNode(currentAddingType !== "");
+  }, [currentAddingType]);
+
+  useEffect(() => {
+    !isCreatingMathNode &&
+      dispatch({
+        type: "setCurrentAddingType",
+        payload: {
+          buttonType: "",
+          mathButtonData: { latex: "", pieces: [] },
+        },
+      });
+  }, [isCreatingMathNode]);
 
   const classes = useStyles();
+
+  const handleTabChange = useCallback((e, newValue) => {
+    dispatch({ type: "setCurrentTab", payload: newValue });
+  });
+
+  const tabInputs = useMemo(() => {
+    return tabsContent[currentTab].inputs;
+  }, [currentTab]);
 
   return (
     <Paper elevation={3} className={classes.inputComponent}>
       <Grid container spacing={1}>
-        <Display
-          currentLatex={currentLatex}
-          toggleIsCreatingNode={toggleIsCreatingNode}
-          isCreatingNode={isCreatingNode}
-        />
-        <AppBar position="static" className={classes.tabsBar}>
-          <Box display="flex" justifyContent="center" width="100%">
+        <AppBar position='static' className={classes.tabsBar}>
+          <Box display='flex' justifyContent='center' width='100%'>
             <Tabs
               value={currentTab}
-              onChange={(e, newValue) => setCurrentTab(newValue)}
-              centered
-              variant="scrollable"
-              scrollButtons="auto"
+              onChange={handleTabChange}
+              variant='scrollable'
+              scrollButtons='auto'
               selectionFollowsFocus
             >
-              {content.map((tab, index) => (
-                <Tab label={tab.name} id={`tab-${index}`} key={index} />
+              {tabsContent.map((tab, index) => (
+                <Tab label={tab.name} key={`tab-${index}`} />
               ))}
             </Tabs>
           </Box>
         </AppBar>
-        <div className={classes.inputContainer}>
-          {content[currentTab].buttons.map((button) => (
-            <InputButton
-              buttonLatex={button.latex}
-              setCurrentLatex={setCurrentLatex}
-              buttonOperator={button.operator}
-              setCurrentOperator={setCurrentOperator}
-              selected={currentLatex === button.latex}
-            ></InputButton>
-          ))}
-        </div>
+        {tabInputs.numbers && (
+          <InputAccordion
+            inputType={"Number"}
+            inputs={tabInputs.numbers}
+            inputData={numberData}
+            currentAddingType={currentAddingType}
+            isCreatingMathNode={isCreatingMathNode}
+            dispatch={dispatch}
+          />
+        )}
+        {tabInputs.variables && (
+          <InputAccordion
+            inputType={"Variable"}
+            inputs={tabInputs.variables}
+            inputData={variableData}
+            currentAddingType={currentAddingType}
+            isCreatingMathNode={isCreatingMathNode}
+            dispatch={dispatch}
+          />
+        )}
+        {tabInputs.buttons && (
+          <InputAccordion
+            inputType={"mathButton"}
+            inputs={{ buttons: tabsContent[currentTab].buttons }}
+            inputData={mathButtonData}
+            currentAddingType={currentAddingType}
+            isCreatingMathNode={isCreatingMathNode}
+            dispatch={dispatch}
+          />
+        )}
       </Grid>
     </Paper>
   );
@@ -134,38 +136,23 @@ function InputComponent({
 
 InputComponent.propTypes = {
   /**
-   * Currently selected Latex expression
+   * Function to set the currently selected math expression pieces
    */
-  currentLatex: PropTypes.string.isRequired,
+  setCurrentMathSelection: PropTypes.func,
   /**
-   * Function to set the currently selected Latex expression
+   * Function to set the isCreatingMathNode state
    */
-  setCurrentLatex: PropTypes.func.isRequired,
+  setIsCreatingMathNode: PropTypes.func,
   /**
-   * Currently selected math operator
+   * Boolean to keep track if the adding math node mode is active
    */
-  currentOperator: PropTypes.string.isRequired,
-  /**
-   * Function to set the currently selected math operator
-   */
-  setCurrentOperator: PropTypes.func.isRequired,
-  /**
-   * Function to toggle the isCreatingNode state
-   */
-  toggleIsCreatingNode: PropTypes.func,
-  /**
-   * Boolean to keep track if the adding node mode is active
-   */
-  isCreatingNode: PropTypes.bool,
+  isCreatingMathNode: PropTypes.bool,
 };
 
 InputComponent.defaultProps = {
-  currentLatex: '\\text{Press a button}',
-  setCurrentLatex: () => {},
-  currentOperator: '',
-  setCurrentOperator: () => {},
-  toggleIsCreatingNode: () => {},
-  isCreatingNode: false,
+  setCurrentMathSelection: () => {},
+  setIsCreatingMathNode: () => {},
+  isCreatingMathNode: false,
 };
 
 export default InputComponent;
