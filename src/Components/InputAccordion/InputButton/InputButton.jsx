@@ -69,25 +69,43 @@ function InputButton({
   }, [buttonType]);
 
   return (
-    <Tooltip
-      title={!selected ? buttonName : "Clear Adding"}
-      placement={tooltipPlacement}
-      arrow
-    >
-      <Button
-        className={`
+    <>
+      {!disabled ? (
+        <Tooltip
+          title={!selected ? buttonName : "Clear Adding"}
+          placement={tooltipPlacement}
+          arrow
+        >
+          <Button
+            className={`
           ${classes.inputButton} ${
-          buttonType === "mathButton" ? "" : classes.customInputButton
-        } ${selected ? classes.selectedButton : classes.unselectedButton}
+              buttonType === "mathButton" ? "" : classes.customInputButton
+            } ${selected ? classes.selectedButton : classes.unselectedButton}
         `}
-        value={buttonLatex}
-        variant='outlined'
-        onClick={handleButtonClick}
-        disabled={disabled}
-      >
-        <span ref={katexContainerRef} />
-      </Button>
-    </Tooltip>
+            value={buttonLatex}
+            variant='outlined'
+            onClick={handleButtonClick}
+            disabled={disabled}
+          >
+            <span ref={katexContainerRef} />
+          </Button>
+        </Tooltip>
+      ) : (
+        <Button
+          className={`
+          ${classes.inputButton} ${
+            buttonType === "mathButton" ? "" : classes.customInputButton
+          } ${selected ? classes.selectedButton : classes.unselectedButton}
+        `}
+          value={buttonLatex}
+          variant='outlined'
+          onClick={handleButtonClick}
+          disabled={disabled}
+        >
+          <span ref={katexContainerRef} />
+        </Button>
+      )}
+    </>
   );
 }
 
@@ -116,6 +134,13 @@ InputButton.propTypes = {
       height: PropTypes.number,
       value: PropTypes.string,
       fontSize: PropTypes.number,
+      linePoints: PropTypes.shape({
+        x1: PropTypes.number,
+        y1: PropTypes.number,
+        x2: PropTypes.number,
+        y2: PropTypes.number,
+      }),
+      lineStrokeWidth: PropTypes.number,
     }),
   ),
   /**

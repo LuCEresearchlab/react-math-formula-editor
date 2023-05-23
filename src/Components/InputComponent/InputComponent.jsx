@@ -30,13 +30,36 @@ function InputComponent({
     dispatch,
   ] = useReducer(mathInputReducer, initialInputState);
 
+  // Width of a character at fontSize: 1 (based on default font used)
+  // TODO adjust if fontFamily is changed from default
+  const unitFontSizeWidth = 0.60009765625;
+
+  const computePeriodicLinePoints = useCallback(
+    (numberValue, periodicIndex, fontSize) => {
+      const noPeriodicTextWidth =
+        numberValue.substring(0, numberValue.length - periodicIndex).length *
+        unitFontSizeWidth *
+        fontSize;
+      const periodicTextWidth =
+        numberValue.substring(numberValue.length - periodicIndex).length *
+        unitFontSizeWidth *
+        fontSize;
+      return {
+        x1: noPeriodicTextWidth,
+        y1: -2,
+        x2: noPeriodicTextWidth + periodicTextWidth,
+        y2: -2,
+      };
+    },
+  );
+
   useEffect(() => {
     if (currentAddingType !== "mathButton") {
       const pieces = [
         {
           type: "text",
-          x: 12,
-          y: 12,
+          x: 0,
+          y: 0,
           fontSize:
             currentAddingType === "Number"
               ? numberData.fontSize
@@ -47,12 +70,38 @@ function InputComponent({
                 numberData.value +
                 (numberData.isInfiniteNumber ? "…" : "")
               : variableData.value,
-          periodicIndex:
-            currentAddingType === "Number" && Number(numberData.periodicIndex),
-          subscript:
-            currentAddingType === "Variable" && variableData.subscriptIndex,
         },
       ];
+      if (
+        currentAddingType === "Number" &&
+        Number(numberData.periodicIndex) !== 0
+      ) {
+        pieces.push({
+          type: "line",
+          linePoints: computePeriodicLinePoints(
+            numberData.value,
+            numberData.periodicIndex,
+            numberData.fontSize,
+          ),
+          lineStrokeWidth: numberData.fontSize / 15,
+        });
+      }
+      if (
+        currentAddingType === "Variable" &&
+        variableData.subscriptIndex !== ""
+      ) {
+        pieces.push({
+          type: "text",
+          x:
+            unitFontSizeWidth *
+              variableData.fontSize *
+              variableData.value.length +
+            3,
+          y: variableData.fontSize * 0.6,
+          fontSize: variableData.fontSize * 0.6,
+          value: variableData.subscriptIndex,
+        });
+      }
       setCurrentMathSelection(pieces);
     } else {
       setCurrentMathSelection(mathButtonData.pieces);
@@ -79,6 +128,10 @@ function InputComponent({
 
   const tabInputs = useMemo(() => {
     return tabsContent[currentTab].inputs;
+  }, [currentTab]);
+
+  const tabButtons = useMemo(() => {
+    return tabsContent[currentTab].buttons;
   }, [currentTab]);
 
   return (
@@ -122,7 +175,7 @@ function InputComponent({
         {tabInputs.buttons && (
           <InputAccordion
             inputType={"mathButton"}
-            inputs={{ buttons: tabsContent[currentTab].buttons }}
+            inputs={{ buttons: tabButtons }}
             inputData={mathButtonData}
             currentAddingType={currentAddingType}
             isCreatingMathNode={isCreatingMathNode}
