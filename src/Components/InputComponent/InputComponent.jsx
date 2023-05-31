@@ -107,7 +107,7 @@ function InputComponent({
       setCurrentMathSelection(mathButtonData.pieces);
     }
     setIsCreatingMathNode(currentAddingType !== "");
-  }, [currentAddingType]);
+  }, [currentAddingType, mathButtonData]);
 
   useEffect(() => {
     !isCreatingMathNode &&

@@ -124,7 +124,7 @@ export const tabsContent = [
         latex: "{\\square}\\neq{\\square}",
         name: "Not Equal",
         pieces: [
-          { type: "hole", x: 0, width: 160, y: 0, height: 240 },
+          { type: "hole", x: 0, width: 16, y: 0, height: 24 },
           { type: "text", x: 21, y: 0, fontSize: 24, value: "≠" },
           { type: "hole", x: 40, width: 16, y: 0, height: 24 },
         ],
@@ -208,7 +208,7 @@ export const tabsContent = [
           { type: "text", x: 14, y: 11, fontSize: 36, value: "√" },
           {
             type: "line",
-            linePoints: { x1: 44.2, y1: 25.6, x2: 75, y2: 25.6 },
+            linePoints: { x1: 32.2, y1: 13.6, x2: 63, y2: 13.6 },
             lineStrokeWidth: 3,
           },
           { type: "hole", x: 40, width: 16, y: 18, height: 24 },
