@@ -50,11 +50,12 @@ export const tabsContent = [
         ],
       },
       {
-        latex: "\\pm{\\square}",
-        name: "Plus-Minus Value",
+        latex: "{\\square}\\pm{\\square}",
+        name: "Plus-Minus",
         pieces: [
-          { type: "text", x: 0, y: 0, fontSize: 24, value: "±" },
-          { type: "hole", x: 21, width: 16, y: 0, height: 24 },
+          { type: "hole", x: 0, width: 16, y: 0, height: 24 },
+          { type: "text", x: 21, y: 0, fontSize: 24, value: "±" },
+          { type: "hole", x: 40, width: 16, y: 0, height: 24 },
         ],
       },
       {
