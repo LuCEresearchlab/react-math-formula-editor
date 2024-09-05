@@ -5,7 +5,7 @@ Number input Accordion
   inputType='Number'
   inputs={{
     periodic: true,
-    infinite: true,
+    irrational: true,
     subscript: false,
     fontSize: true,
     buttons: null,
@@ -20,7 +20,7 @@ Variable input Accordion
   inputType='Veriable'
   inputs={{
     periodic: false,
-    infinite: false,
+    irrational: false,
     subscript: true,
     fontSize: true,
     buttons: null,
@@ -35,7 +35,7 @@ Math buttons input Accordion
   inputType='mathButton'
   inputs={{
     periodic: false,
-    infinite: false,
+    irrational: false,
     subscript: false,
     fontSize: false,
     buttons: [

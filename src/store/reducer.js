@@ -8,20 +8,17 @@ export const mathInputReducer = (state, action) => {
         currentAddingType: "",
       };
     case "setNumberValue":
-      const isInfiniteNumber = state.numberData.isInfiniteNumber;
       return {
         ...state,
         numberData: {
           ...state.numberData,
           value: action.payload,
           periodicIndex: "",
-          isInfiniteNumber: action.payload !== "" ? isInfiniteNumber : false,
+          isIrrationalNumber: "",
           latex:
             action.payload === ""
               ? "\\text{Write a Number}"
-              : (action.payload.startsWith(".") ? "0" : "") +
-                action.payload +
-                (isInfiniteNumber ? "…" : ""),
+              : (action.payload.startsWith(".") ? "0" : "") + action.payload,
         },
         mathButtonData: {
           latex: "",
@@ -36,7 +33,7 @@ export const mathInputReducer = (state, action) => {
         numberData: {
           ...state.numberData,
           periodicIndex: action.payload,
-          isInfiniteNumber: false,
+          isIrrationalNumber: false,
           latex:
             action.payload !== ""
               ? numberValue.substring(
@@ -56,14 +53,14 @@ export const mathInputReducer = (state, action) => {
         },
         currentAddingType: "",
       };
-    case "setIsInfiniteNumber":
+    case "setIsIrrationalNumber":
       const valueNumber = state.numberData.value;
       return {
         ...state,
         numberData: {
           ...state.numberData,
           periodicIndex: "",
-          isInfiniteNumber: action.payload,
+          isIrrationalNumber: action.payload,
           latex: valueNumber + (action.payload ? "…" : ""),
         },
         mathButtonData: {

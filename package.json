@@ -19,9 +19,9 @@
     "react"
   ],
   "scripts": {
-    "start": "NODE_ENV=development BABEL_ENV=development styleguidist server --open",
-    "styleguide:build": "NODE_ENV=production BABEL_ENV=production styleguidist build",
-    "build": "NODE_ENV=production BABEL_ENV=production webpack --mode=production",
+    "start": "NODE_OPTIONS=--openssl-legacy-provider NODE_ENV=development BABEL_ENV=development styleguidist server --open",
+    "styleguide:build": "NODE_OPTIONS=--openssl-legacy-provider NODE_ENV=production BABEL_ENV=production styleguidist build",
+    "build": "NODE_OPTIONS=--openssl-legacy-provider NODE_ENV=production BABEL_ENV=production webpack --mode=production",
     "test": "jest"
   },
   "dependencies": {

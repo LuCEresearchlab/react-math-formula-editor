@@ -4,7 +4,7 @@ export const tabsContent = [
     inputs: {
       numbers: {
         periodic: true,
-        infinite: true,
+        irrational: true,
         fontSize: true,
       },
       variables: {
@@ -307,7 +307,7 @@ export const tabsContent = [
     inputs: {
       numbers: {
         periodic: true,
-        infinite: true,
+        irrational: true,
         fontSize: true,
       },
       variables: {
@@ -401,7 +401,7 @@ export const tabsContent = [
     inputs: {
       numbers: {
         periodic: true,
-        infinite: true,
+        irrational: true,
         fontSize: true,
       },
       variables: {
@@ -567,7 +567,7 @@ export const tabsContent = [
     inputs: {
       numbers: {
         periodic: true,
-        infinite: true,
+        irrational: true,
         fontSize: true,
       },
       variables: {
@@ -725,7 +725,7 @@ export const tabsContent = [
         name: "Superset Equal",
         pieces: [
           { type: "hole", x: 0, width: 16, y: 0, height: 24 },
-          { type: "text", x: 21, y: 0, fontSize: 24, value: " ⊇" },
+          { type: "text", x: 21, y: 0, fontSize: 24, value: "⊇" },
           { type: "hole", x: 40, width: 16, y: 0, height: 24 },
         ],
       },
@@ -1262,7 +1262,7 @@ export const tabsContent = [
     inputs: {
       numbers: {
         periodic: true,
-        infinite: true,
+        irrational: true,
         fontSize: true,
       },
       variables: {
@@ -1496,7 +1496,7 @@ export const tabsContent = [
     inputs: {
       numbers: {
         periodic: true,
-        infinite: true,
+        irrational: true,
         fontSize: true,
       },
       variables: {

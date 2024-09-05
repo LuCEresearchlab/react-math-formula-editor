@@ -3,7 +3,7 @@ export const initialInputState = {
   numberData: {
     value: "",
     periodicIndex: "",
-    isInfiniteNumber: false,
+    isIrrationalNumber: false,
     fontSize: 24,
     latex: "\\text{Write a Number}",
   },

@@ -10,8 +10,6 @@ import { initialInputState } from "../../store/initialState";
 
 import InputAccordion from "../InputAccordion/InputAccordion";
 
-import "../../../node_modules/katex/dist/katex.min.css";
-
 const useStyles = makeStyles((theme) => ({
   inputComponent: {
     margin: theme.spacing(1),
@@ -68,7 +66,7 @@ function InputComponent({
             currentAddingType === "Number"
               ? (numberData.value.startsWith(".") ? "0" : "") +
                 numberData.value +
-                (numberData.isInfiniteNumber ? "…" : "")
+                (numberData.isIrrationalNumber ? "…" : "")
               : variableData.value,
         },
       ];

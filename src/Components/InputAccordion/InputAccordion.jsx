@@ -94,11 +94,11 @@ InputAccordion.propTypes = {
    */
   inputType: PropTypes.string,
   /**
-   * Object containing the used custom inputs elements (periodic decimals, infinite numbers, variable subscript index, number/variable font size, math buttons)
+   * Object containing the used custom inputs elements (periodic decimals, irrational numbers, variable subscript index, number/variable font size, math buttons)
    */
   inputs: PropTypes.shape({
     periodic: PropTypes.bool,
-    infinite: PropTypes.bool,
+    irrational: PropTypes.bool,
     subscript: PropTypes.bool,
     fontSize: PropTypes.bool,
     buttons: PropTypes.arrayOf(
@@ -115,7 +115,7 @@ InputAccordion.propTypes = {
   inputData: PropTypes.shape({
     value: PropTypes.string,
     periodicIndex: PropTypes.number,
-    isInfiniteNumber: PropTypes.bool,
+    isIrrationalNumber: PropTypes.bool,
     subscriptIndex: PropTypes.string,
     fontSize: PropTypes.number,
     latex: PropTypes.string,
@@ -139,7 +139,7 @@ InputAccordion.defaultProps = {
   inputType: "",
   inputs: {
     periodic: false,
-    infinite: false,
+    irrational: false,
     subscript: false,
     fontSize: false,
     buttons: null,
@@ -147,7 +147,7 @@ InputAccordion.defaultProps = {
   inputData: {
     value: "",
     periodicIndex: 0,
-    isInfiniteNumber: false,
+    isIrrationalNumber: false,
     subscriptIndex: "",
     fontSize: 24,
     latex: "",

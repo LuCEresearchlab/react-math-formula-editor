@@ -78,8 +78,8 @@ function InputAccordionDetails({
     dispatch({ type: "setPeriodicIndex", payload: e.target.value });
   });
 
-  const handleInfiniteNumberChange = useCallback((e) => {
-    dispatch({ type: "setIsInfiniteNumber", payload: e.target.checked });
+  const handleIrrationalNumberChange = useCallback((e) => {
+    dispatch({ type: "setIsIrrationalNumber", payload: e.target.checked });
   });
 
   const handleSubscriptIndexChange = useCallback((e) => {
@@ -102,9 +102,9 @@ function InputAccordionDetails({
     return decimalsLength === 0;
   }, [decimalsLength]);
 
-  const disabledInfinite = useMemo(() => {
-    return inputData.value === "";
-  }, [inputData]);
+  const disabledIrrational = useMemo(() => {
+    return decimalsLength === 0;
+  }, [decimalsLength]);
 
   return (
     <>
@@ -131,17 +131,17 @@ function InputAccordionDetails({
           ))}
         </TextField>
       )}
-      {inputs.infinite && (
+      {inputs.irrational && (
         <FormControl>
-          <FormLabel>Infinite number</FormLabel>
+          <FormLabel>Irrational number</FormLabel>
           <FormControlLabel
             className={classes.customInputLabel}
             control={
               <Checkbox
                 color='primary'
-                disabled={disabledInfinite}
-                checked={inputData.isInfiniteNumber}
-                onChange={handleInfiniteNumberChange}
+                disabled={disabledIrrational}
+                checked={inputData.isIrrationalNumber}
+                onChange={handleIrrationalNumberChange}
               />
             }
             labelPlacement='top'
@@ -215,11 +215,11 @@ InputAccordionDetails.propTypes = {
    */
   inputType: PropTypes.string,
   /**
-   * Object containing the used custom inputs elements (periodic decimals, infinite numbers, variable subscript index, number/variable font size, math buttons)
+   * Object containing the used custom inputs elements (periodic decimals, irrational numbers, variable subscript index, number/variable font size, math buttons)
    */
   inputs: PropTypes.shape({
     periodic: PropTypes.bool,
-    infinite: PropTypes.bool,
+    irrational: PropTypes.bool,
     subscript: PropTypes.bool,
     fontSize: PropTypes.bool,
     buttons: PropTypes.arrayOf(
@@ -236,7 +236,7 @@ InputAccordionDetails.propTypes = {
   inputData: PropTypes.shape({
     value: PropTypes.string,
     periodicIndex: PropTypes.string,
-    isInfiniteNumber: PropTypes.bool,
+    isIrrationalNumber: PropTypes.bool,
     subscriptIndex: PropTypes.string,
     fontSize: PropTypes.number,
     latex: PropTypes.string,
@@ -260,7 +260,7 @@ InputAccordionDetails.defaultProps = {
   inputType: "",
   inputs: {
     periodic: false,
-    infinite: false,
+    irrational: false,
     subscript: false,
     fontSize: false,
     buttons: null,
@@ -268,7 +268,7 @@ InputAccordionDetails.defaultProps = {
   inputData: {
     value: "",
     periodicIndex: "",
-    isInfiniteNumber: false,
+    isIrrationalNumber: false,
     subscriptIndex: "",
     fontSize: 24,
     latex: "",
